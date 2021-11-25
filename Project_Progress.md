@@ -6,9 +6,9 @@ Lahari Pisupati, Grace Im, Shivani Ingle, Crystal Wang
 
 **Tasks:** 
      
-      Clean dataset, remove unnecessary columns - 2 hours
+      Clean dataset → remove unnecessary columns - 2 hours
       Stop word removal in movie descriptions - 2 hours
-      Clean overviews: stopword/punctuation removal, tokenization, lowercasing - 2 hours
+      Clean overviews → lowercasing, stopword removal, punctuation removal, split genres - 2 hours
       Write code to create a topic model - 10 hours
       Train the model - 2 hours
       Testing accuracy of topic model output - 2 hours
