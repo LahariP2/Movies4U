@@ -9,3 +9,5 @@ We are going to use the Chrome API to create a Chrome extension. We are using th
 # How it works
 The function of our code is to output a list of recommended movies based on their ranking and/or the genre of the movie that matches best to the query users enter into the search bars. Users could enter a title, summary, theme, or storyline of their choice. Our software can be used for looking up the genre of a movie based on the title or to look for new movie recommendations to watch. It can also be used for searching the title of the movie that the user forgot. 
 
+# Implementation
+Unigram
