@@ -14,7 +14,7 @@ def getTrainTestSplitAsDFFromDF(movie_data_csv_file):
     # Split the genre overview dataframe into 80-20 train-test split
     genres = genre_overview_df["Genre"].tolist()
     overviews = genre_overview_df["Overview"].tolist()
-    overview_train, overview_test, genre_train, genre_test = train_test_split(overviews, genres, test_size = 0.33, random_state = 42)
+    overview_train, overview_test, genre_train, genre_test = train_test_split(overviews, genres, test_size = 0.25, random_state = 42)
 
     train_data_array = np.column_stack((genre_train, overview_train))
     train_genre_overviews_df = pd.DataFrame(train_data_array, columns = ["Genre", "Overview"])
@@ -129,6 +129,24 @@ def normalizeTopicModelProbabilities(topic_model_probs_array):
 
 #############################################################################################################################
 
+def calculatePriorProbabilities(genre_overview, unique_genres): 
+
+    prior_probabilities = {}
+    num_unique_genres = len(unique_genres)
+
+    for index, row in genre_overview.iterrows():
+        genre = row["Genre"]
+        if (genre not in prior_probabilities): 
+            # print(genre)
+            prior_probabilities[genre] = 1
+        else: 
+            prior_probabilities[genre] += 1
+
+    for genre in prior_probabilities: 
+        prior_probabilities[genre] / num_unique_genres
+
+    return prior_probabilities
+
 def generateTopicModel(genre_overview): 
 
     unique_genres, genre_index_map = getUniqueGenres(genre_overview)
@@ -175,7 +193,7 @@ def retrieveCleanedInputOverview(input_overview):
 
     return input_overview
     
-def probsOfOverviewPerGenre(input_overview, unique_genres, genre_index_map, unique_words, topic_model): 
+def probsOfOverviewPerGenre(input_overview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities): 
     
     # Initialize all probabilities to 1
     num_unique_genres = len(unique_genres)
@@ -187,19 +205,20 @@ def probsOfOverviewPerGenre(input_overview, unique_genres, genre_index_map, uniq
         if word not in unique_words: 
             continue
         for genre in unique_genres: 
+            genre_prior_probability = prior_probabilities[genre]
             genre_id = genre_index_map[genre]
             probWordInGenre = topic_model.at[genre_id, word]
-            probabilitiesPerGenre[genre_id] *= probWordInGenre
+            probabilitiesPerGenre[genre_id] *= genre_prior_probability * probWordInGenre
 
     return probabilitiesPerGenre
 
 #############################################################################################################################
 
-def classifyMovieOverview(input_overview, unique_genres, genre_index_map, unique_words, topic_model): 
+def classifyMovieOverview(input_overview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities): 
 
     # Clean input overview and get the probabilities that the overview is generated from each genre
     input_overview = retrieveCleanedInputOverview(input_overview)
-    probabilitiesPerGenre = probsOfOverviewPerGenre(input_overview, unique_genres, genre_index_map, unique_words, topic_model)
+    probabilitiesPerGenre = probsOfOverviewPerGenre(input_overview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities)
 
     # Sort the genre probabilities and return the top three most likely genres (if applicable) that the input overview can be classified into
     num_unique_genres = len(unique_genres)
@@ -216,11 +235,11 @@ def classifyMovieOverview(input_overview, unique_genres, genre_index_map, unique
 #############################################################################################################################
 #############################################################################################################################
 
-def testModelAccuracy(overview_test, genre_test, unique_genres, genre_index_map, unique_words, topic_model): 
+def testModelAccuracy(overview_test, genre_test, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities): 
     i = 0
     correct = 0
     for overview in overview_test: 
-        movie_genre = classifyMovieOverview(overview, unique_genres, genre_index_map, unique_words, topic_model)
+        movie_genre = classifyMovieOverview(overview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities)[0]
         correct_genres = (genre_test[i]).split(", ")
         if (movie_genre in correct_genres): 
             correct += 1
@@ -239,7 +258,15 @@ WORD_WEIGHT = 100000
 
 def topicModelClassifyMovie(inputOverview): 
     train_genre_overviews_df, overview_train, overview_test, genre_train, genre_test = getTrainTestSplitAsDFFromDF("movie_data.csv")
-    train_genre_overviews_df = retrieveCleanedData(train_genre_overviews_df)
-    unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(train_genre_overviews_df)
-    movie_genre = classifyMovieOverview(inputOverview, unique_genres, genre_index_map, unique_words, topic_model)
+    cleaned_genre_overviews = retrieveCleanedData(train_genre_overviews_df)
+    unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(cleaned_genre_overviews)
+    prior_probabilities = calculatePriorProbabilities(cleaned_genre_overviews, unique_genres)
+    movie_genre = classifyMovieOverview(inputOverview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities)
     return movie_genre[0]
+
+# print(topicModelClassifyMovie("A sole survivor tells of the twisty events leading up to a horrific gun battle on a boat, which began when five criminals met at a seemingly random police lineup."))
+train_genre_overviews_df, overview_train, overview_test, genre_train, genre_test = getTrainTestSplitAsDFFromDF("movie_data.csv")
+cleaned_genre_overviews = retrieveCleanedData(train_genre_overviews_df)
+unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(cleaned_genre_overviews)
+prior_probabilities = calculatePriorProbabilities(cleaned_genre_overviews, unique_genres)
+testModelAccuracy(overview_test, genre_test, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities)
