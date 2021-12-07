@@ -10,4 +10,16 @@ We are going to use the Chrome API to create a Chrome extension. We are using th
 The function of our code is to output a list of recommended movies based on their ranking and/or the genre of the movie that matches best to the query users enter into the search bars. Users could enter a title, summary, theme, or storyline of their choice. Our software can be used for looking up the genre of a movie based on the title or to look for new movie recommendations to watch. It can also be used for searching the title of the movie that the user forgot. 
 
 # Implementation
-Unigram
+We initially cleaned the dataset and removed the stopwords like “and”,”you”,”by”,etc. in order to give more weightage to important and unique words. We further cleaned the data of the movie descriptions by tokenizing the text and removing punctuations. We then found the unique genres and then converted it to a list so as to map each genre to its row index in the topic model dataframe. We implemented a unigram language model to generate text by generating each word independently. We further used Bayesian estimation/inference to associate each document with a probability distribution over topics. We found the probability of the word in the document, and then normalised these probabilities such that the p(w|genre) = 1. Based on the number of times the words in the query occured in a document, we ranked these documents and outputted the results.
+
+# How to run the program
+1. To install and run the software, first we need to git clone from GitHub Repository. Open terminal and change the current working directory to the location directory where you want to clone the repository. 
+2. Git clone https://github.com/LahariP2/Movies4U.git
+3. After cloning into your local directory, you can run
+  ```export FLASK_APP=movies4u```
+  ```flask run```
+4. If you run into a WARNING: This is a development server. Run this command line:
+  ```export FLASK_ENV=development before flask run```
+5. After running the above command lines, copy, paste, and go to the link: http://127.0.0.1:5000/
+You will be able to see a web page with two search bars. The information you entered into the first search bar will output the overview of the movie and genre, while the second search bar will generate a list of the top 5 ranked movies based on your search. 
+
