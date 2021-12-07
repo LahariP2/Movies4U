@@ -14,7 +14,7 @@ def getTrainTestSplitAsDFFromDF(movie_data_csv_file):
     # Split the genre overview dataframe into 80-20 train-test split
     genres = genre_overview_df["Genre"].tolist()
     overviews = genre_overview_df["Overview"].tolist()
-    overview_train, overview_test, genre_train, genre_test = train_test_split(overviews, genres, test_size = 0.10, random_state = 42)
+    overview_train, overview_test, genre_train, genre_test = train_test_split(overviews, genres, test_size = 0.33, random_state = 42)
 
     train_data_array = np.column_stack((genre_train, overview_train))
     train_genre_overviews_df = pd.DataFrame(train_data_array, columns = ["Genre", "Overview"])
@@ -120,10 +120,10 @@ def convertToProbability(topic_model_counts):
 
 def normalizeTopicModelProbabilities(topic_model_probs_array): 
 
-    # Normalize probabilities such that the product of p(w|genre) = 1, for all w in the set unique_words and a particular genre
-    for row_idx in range(topic_model_probs_array.shape[0]): 
-        norm = np.linalg.norm(topic_model_probs_array[row_idx])
-        topic_model_probs_array[row_idx] /= norm
+    # Normalize probabilities
+    for col_idx in range(topic_model_probs_array.shape[1]): 
+        norm = np.linalg.norm(topic_model_probs_array[:, col_idx])
+        topic_model_probs_array[:, col_idx] /= norm
 
     return topic_model_probs_array
 
@@ -216,20 +216,17 @@ def classifyMovieOverview(input_overview, unique_genres, genre_index_map, unique
 #############################################################################################################################
 #############################################################################################################################
 
-def testModelAccuracy(overview_test, genre_test): 
+def testModelAccuracy(overview_test, genre_test, unique_genres, genre_index_map, unique_words, topic_model): 
     i = 0
     correct = 0
-    total = 0
     for overview in overview_test: 
-        movie_genres = classifyMovieOverview(overview, unique_genres, genre_index_map, unique_words, topic_model)
+        movie_genre = classifyMovieOverview(overview, unique_genres, genre_index_map, unique_words, topic_model)
         correct_genres = (genre_test[i]).split(", ")
-        for corr in correct_genres: 
-            if (corr in movie_genres): 
-                correct += 1
-            total += 1
-
+        if (movie_genre in correct_genres): 
+            correct += 1
         i += 1
-    print("Accuracy: " + str(100 * correct/total) + "%")
+
+    print("Accuracy: " + str(100 * correct/i) + "%")
 
 #############################################################################################################################
 #############################################################################################################################
@@ -240,10 +237,9 @@ STOP_WORDS = stopwords_file.read().splitlines()
 DEFAULT_PROBABILITY = 0.0001
 WORD_WEIGHT = 100000
 
-# for weight in range(5, 1000)
-train_genre_overviews_df, overview_train, overview_test, genre_train, genre_test = getTrainTestSplitAsDFFromDF("movie_data.csv")
-train_genre_overviews_df = retrieveCleanedData(train_genre_overviews_df)
-
-unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(train_genre_overviews_df)
-
-testModelAccuracy(overview_test, genre_test)
+def topicModelClassifyMovie(inputOverview): 
+    train_genre_overviews_df, overview_train, overview_test, genre_train, genre_test = getTrainTestSplitAsDFFromDF("movie_data.csv")
+    train_genre_overviews_df = retrieveCleanedData(train_genre_overviews_df)
+    unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(train_genre_overviews_df)
+    movie_genre = classifyMovieOverview(inputOverview, unique_genres, genre_index_map, unique_words, topic_model)
+    return movie_genre[0]

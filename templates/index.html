@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <title>Movies4U</title>
+       <script src="jquery-3.5.1.min.js"></script>
+       <script src="options.js"></script>
+      
+   </head>
+   <body style="background-color:seashell;">
+    
+    <h1>Movies4U</h1>    
+    
+    <hr size="8" width="100%" color="darkblue">  
+
+    <form action="/" method="post">
+        
+        <h1 style="color:darkblue;">Classify movies</h1> 
+        <h3 style="color:darkblue;">Get the genre of a movie by inputting an overview/summary</h3>
+        
+        <input name="inputOverview">
+        <button name="submitMovieOverview" type="submit">Classify</button>
+    
+        <h3 style="color:salmon;">Movie Overview:</h3>
+        <h3><span id="movieOverview"></span>{{ overview }}</h3>
+        <h3 style="color:salmon;">Movie Genre:</h3>
+        <h3><span id="movieGenre"></span>{{ genre }}</h3>
+
+        <br> 
+        <hr size="8" width="100%" color="darkblue">  
+
+        <h1 style="color:darkblue;">Movie recommendations</h1> 
+        <h3 style="color:darkblue;">Input query and get movie recommendations</h3>
+
+        <input name="inputQuery">
+        <button name="submitMovieQuery" type="submit">Search</button>
+        
+        <h3 style="color:salmon;">Movie Query:</h3>
+        <h3><span id="movieOverview"></span>{{ query }}</h3>
+
+        <h3 style="color:salmon;">Movie Recommendations:</h3>
+        <h3><span id="movieRecommendationOne"></span>{{ recommendations[0] }}</h3>
+        <h3><span id="movieRecommendationTwo"></span>{{ recommendations[1] }}</h3>
+        <h3><span id="movieRecommendationThree"></span>{{ recommendations[2] }}</h3>
+        <h3><span id="movieRecommendationFour"></span>{{ recommendations[3] }}</h3>
+        <h3><span id="movieRecommendationFive"></span>{{ recommendations[4] }}</h3>
+
+    </form>
+
+    <br>
+    <hr size="8" width="100%" color="darkblue">  
+
+   </body>
+</html>
