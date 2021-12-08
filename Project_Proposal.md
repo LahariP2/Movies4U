@@ -30,11 +30,11 @@
       
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will integrate the topic model and search engine with backend methods to fetch data based on user input.
       
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finally, we will create a Chrome Extension to enable easy user usage. 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finally, we will create a Flask web application to enable easy user usage. 
 
     **What tools, systems or datasets are involved?**
       
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are going to use the Chrome API to create a Chrome extension
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are going to Flask framework to create the web application. 
       
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are using the movies dataset includes 85,855 movies with attributes such as movie description, average rating, number of votes, and genre. Data has been scraped from the publicly available website https://www.imdb.com. All the movies with more than 100 votes have been scrapped as of 01/01/2020.
 
