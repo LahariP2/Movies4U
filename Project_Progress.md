@@ -9,19 +9,19 @@ Lahari Pisupati, Grace Im, Shivani Ingle, Crystal Wang
       Clean dataset → remove unnecessary columns - 2 hours
       Stop word removal in movie descriptions - 2 hours
       Clean overviews → lowercasing, stopword removal, punctuation removal, split genres - 2 hours
-      Write code to create a topic model - 10 hours
-      Train the model - 2 hours
-      Testing accuracy of topic model output - 2 hours
-      Debugging and fixing errors for the topic model - 2 hours
+      Write code to create a topic model and classify input - 10 hours
+      Train the model - 2 hours       
+      Test accuracy of topic model output - 2 hours
+      Debug and fix errors for the topic model - 2 hours
       Implement TF-IDF ranking algorithm for search engine - 8 hours
       Implement Query Likelihood ranking algorithm for search engine - 8 hours
-      Testing and comparing accuracy of both ranking models - 5 hours
-      Write underlying Chrome Extension code - 5 hours
-      Integrate topic model & ranking code into the Chrome Extension code - 8 hours
-      Create UI design - 6 hours
+      Test and compare accuracy of both ranking models and pick one algorithm - 5 hours
+      Debug and fix errors for the search engine - 5 hours
+      Write underlying Flask app code - 5 hours
+      Integrate topic model & ranking code into the Flask app - 8 hours
+      Create layout of UI design - 6 hours
       Implement UI design - 8 hours
-      Debugging and fixing errors for the search engine - 5 hours
-      Cleaning up code, writing comments - 5 hours
+      Clean up code, write documentation, and record demonstration - 5 hours
 
 
 
@@ -48,7 +48,7 @@ create a tokenized object. Next we converted the tokenized object into a corpus 
 
 of topics equal to the number of genres in the dataset. We finally used a visualization package pyLDAvis to visualize the topic model. 
 
-
+Update: We ended up using a Unigram model and Naive Bayes algorithm for the topic model and classifier. 
 
 
 **2) Which tasks are pending?**
@@ -59,7 +59,7 @@ and we still have to complete tasks 6-16. These remaining tasks involve testing 
 
 (we might need to try out different topic model algorithms depending on our current results), implementing the main 
 
-portion of the search engine with TF-IDF and Query Likelihood, and developing our Chrome Extension application.  
+portion of the search engine with TF-IDF and Query Likelihood, and developing our Flask web application.  
 
 
 
