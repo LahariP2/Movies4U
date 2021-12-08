@@ -264,7 +264,6 @@ def topicModelClassifyMovie(inputOverview):
     movie_genre = classifyMovieOverview(inputOverview, unique_genres, genre_index_map, unique_words, topic_model, prior_probabilities)
     return movie_genre[0]
 
-# print(topicModelClassifyMovie("A sole survivor tells of the twisty events leading up to a horrific gun battle on a boat, which began when five criminals met at a seemingly random police lineup."))
 train_genre_overviews_df, overview_train, overview_test, genre_train, genre_test = getTrainTestSplitAsDFFromDF("movie_data.csv")
 cleaned_genre_overviews = retrieveCleanedData(train_genre_overviews_df)
 unique_genres, genre_index_map, unique_words, word_index_map, topic_model = generateTopicModel(cleaned_genre_overviews)
