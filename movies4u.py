@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def movies4u():
-    return render_template('index.html', genre = "")
+    return render_template('index.html', genre = "", recommendations = ["", "", "", "", ""])
     
 @app.route("/", methods=['POST'])
 def classifyOverviewOrSearchMovies(): 
